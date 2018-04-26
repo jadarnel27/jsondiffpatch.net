@@ -2692,13 +2692,21 @@ namespace DiffMatchPatch
 
 		internal static string UrlEncode(string str)
 		{
+#if NET35
+			str = Uri.EscapeDataString(str);
+#else
 			str = WebUtility.UrlEncode(str);
+#endif
 			return Regex.Replace(str, "(%[0-9A-F]{2})", encodedChar => encodedChar.Value.ToLowerInvariant());
 		}
 
 		internal static string UrlDecode(string str)
 		{
+#if NET35
+			return Uri.UnescapeDataString(str);
+#else
 			return WebUtility.UrlDecode(str);
+#endif
 		}
 	}
 }
